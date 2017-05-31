@@ -12,7 +12,6 @@ import dao.DepartmentDao;
 
 public class DepartmentService {
 
-	private static final int LIMIT_NUM = 1000;
 
 	public List<Department> getDepartment() {
 
@@ -21,7 +20,7 @@ public class DepartmentService {
 			connection = getConnection();
 
 			DepartmentDao departmentDao = new DepartmentDao();
-			List<Department> ret = departmentDao.getDepartment(connection, LIMIT_NUM);
+			List<Department> ret = departmentDao.getDepartment(connection);
 
 			commit(connection);
 

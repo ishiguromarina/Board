@@ -41,5 +41,19 @@ public class ManageUserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+		if(request.getParameter("StopId") != null){
+			int stopId = Integer.parseInt(request.getParameter("StopId"));
+			int isStopped = Integer.parseInt(request.getParameter("isStopped"));
+			new UserService().stopUser(stopId,isStopped);
+			response.sendRedirect("./manageUser");
+		}
+
+		if(request.getParameter("deleteId") != null){
+			System.out.println(request.getParameter("deleteId"));
+			int deleteId = Integer.parseInt(request.getParameter("deleteId"));
+			new UserService().deleteUser(deleteId);
+			response.sendRedirect("./manageUser");
+		}
 	}
+
 }

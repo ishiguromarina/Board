@@ -21,7 +21,6 @@
 	<c:if test="${ not empty loginUser }">
 		<a href="newMessage">新規投稿</a>
 		<a href="manageUser">ユーザー管理</a>
-		<a href="settings">設定</a>
 		<a href="logout">ログアウト</a>
 		<a href="signup">ユーザー登録</a>
 	</c:if>
@@ -49,7 +48,16 @@
 
 				<div class="text"><c:out value="${message.text}" /></div>
 				<div class="date"><fmt:formatDate value="${message.insertDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
-				=============================================
+
+				<c:if test="${ isShowMessageForm }">
+					<form action="index.jsp" method="post">
+						<textarea name="comment" cols="50" rows="2" class="tweet-box"></textarea>
+						<br />
+						<input type="hidden" name="messageId" id="messageId" value="${message.id}">
+						<input type="submit" value="コメントする">（500文字まで）<br>
+						=========================================================<br>
+					</form>
+				</c:if>
 			</div>
 		</div>
 	</c:forEach>

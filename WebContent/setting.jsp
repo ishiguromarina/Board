@@ -22,12 +22,13 @@
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
 
-<form action="setting" method="post" enctype="multipart/form-data"><br />
+<form action="setting" method="post"><br />
+<input type="hidden" name="id" id="id" value="${user.id}">
 	<label for="name">名前</label>
-	<input name="name" value="${editUser.name}" id="name"/><br />
+	<input name="name" value="${user.name}" id="name"/><br />
 
 	<label for="account">アカウント名</label>
-	<input name="account" value="${editUser.account}" /><br />
+	<input name="account" value="${user.account}" /><br />
 
 	<label for="password">パスワード</label>
 	<input name="password" type="password" id="password"/> <br />
@@ -35,14 +36,28 @@
 	<label for="branch">支店</label>
 		<select name = "branchId">
 			<c:forEach var = "branch" items = "${branch}">
-				<option value="${branch.id}"><c:out value ="${branch.name}"></c:out></option>
+				<c:if test="${user.branchId == branch.id}">
+					<option value="${branch.id}"selected>
+					<c:out value ="${branch.name}" ></c:out></option>
+				</c:if>
+				<c:if test="${user.branchId != branch.id}">
+					<option value="${branch.id}">
+					<c:out value ="${branch.name}" ></c:out></option>
+				</c:if>
 			</c:forEach>
 		</select><br />
 
 	<label for="department">役職</label>
 		<select name = "departmentId">
 			<c:forEach var = "department" items = "${department}">
-				<option value="${department.id}"><c:out value ="${department.name}"></c:out></option>
+				<c:if test="${user.departmentId == department.id}">
+					<option value="${department.id}" selected="${department.id}">
+					<c:out value ="${department.name}"></c:out></option>
+				</c:if>
+				<c:if test="${user.departmentId != department.id}">
+					<option value="${department.id}">
+					<c:out value ="${department.name}" ></c:out></option>
+				</c:if>
 			</c:forEach>
 		</select><br /><br />
 

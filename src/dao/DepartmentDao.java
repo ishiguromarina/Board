@@ -14,13 +14,12 @@ import exception.SQLRuntimeException;
 
 public class DepartmentDao {
 
-	public List<Department> getDepartment(Connection connection, int num) {
+	public List<Department> getDepartment(Connection connection) {
 
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM departments ");
-			//sql.append("ORDER BY insert_date DESC limit " + num);
 
 			ps = connection.prepareStatement(sql.toString());
 

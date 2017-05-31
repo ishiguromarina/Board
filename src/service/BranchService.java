@@ -11,7 +11,6 @@ import dao.BranchDao;
 
 public class BranchService {
 
-	private static final int LIMIT_NUM = 1000;
 
 	public List<Branch> getBranch() {
 
@@ -20,7 +19,7 @@ public class BranchService {
 			connection = getConnection();
 
 			BranchDao branchDao = new BranchDao();
-			List<Branch> ret = branchDao.getBranch(connection, LIMIT_NUM);
+			List<Branch> ret = branchDao.getBranch(connection);
 
 			commit(connection);
 

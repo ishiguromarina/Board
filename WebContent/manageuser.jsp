@@ -41,21 +41,30 @@
    			</c:if>
    		</c:forEach>
 
-   		<td><c:if test="${user.isStopped == 0}">
-				<input type="button" value="停止" onClick=""><br>
-			</c:if>
+		<td><form action="manageUser" method="post">
+	   			<c:if test="${user.isStopped == 0}">
+	   				<input type="hidden" name="StopId" id="StopId" value="${user.id}">
+	   				<input type="hidden" name="isStopped" id="isStopped" value="1">
+					<input type="submit" value="停止"><br>
+				</c:if>
 
-   			<c:if test="${user.isStopped != 0}">
-				<input type="button" value="復活" onClick=""><br>
-			</c:if>
+	   			<c:if test="${user.isStopped != 0}">
+	   				<input type="hidden" name="StopId" id="StopId" value="${user.id}">
+	   				<input type="hidden" name="isStopped" id="isStopped" value="0">
+					<input type="submit" value="復活"><br>
+				</c:if>
+			</form>
 
 
 			<form action="setting" method="get">
-				<input type="hidden" name="id" value="${user.id}">
-				<input type="button" value="編集"><br>
+				<input type="hidden" name="id" id="id" value="${user.id}">
+				<input type="submit" value="編集"><br>
 			</form>
 
-			<input type="button" value="削除" onClick=""><br>
+			<form action="manageUser" method="post">
+				<input type="hidden" name="deleteId" id="deleteId" value="${user.id}">
+				<input type="submit" value="削除"><br>
+			</form>
 
     	</td>
   	</tr>

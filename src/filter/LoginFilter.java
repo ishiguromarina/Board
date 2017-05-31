@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import beans.User;
 
-@WebFilter({"/top.jsp", "/signup.jsp", "/newmessage.jsp"})
+@WebFilter({"/top.jsp", "/signup.jsp", "/newmessage.jsp","/manageuser.jsp","/setting.jsp"})
 public class LoginFilter implements Filter{
 	  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 	  throws IOException, ServletException{
@@ -24,7 +24,6 @@ public class LoginFilter implements Filter{
 		  HttpSession session = ((HttpServletRequest)request).getSession();
 		  session.getAttribute("loginUser"); //セッションの中から、"loginUser"という文字列を取り出す
 		  User user = (User)session.getAttribute("loginUser"); //"loginUser"をUser型の変数に置き換える
-
 
 		  //user情報がnullだったらリダイレクトしてリターン。
 		  //nullじゃなければサーブレットを実行

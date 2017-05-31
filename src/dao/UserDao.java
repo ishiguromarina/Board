@@ -48,7 +48,6 @@ public class UserDao {
 			ps.setInt(4, user.getBranchId());
 			ps.setInt(5, user.getDepartmentId());
 
-			System.out.println(ps.toString());
 
 			ps.executeUpdate();
 		} catch (SQLException e) {
@@ -88,6 +87,56 @@ public class UserDao {
 		}
 	}
 
+	public User getUser(Connection connection, int id) {
+
+		PreparedStatement ps = null;
+		try {
+			String sql = "SELECT * FROM users WHERE id = ?";
+
+			ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+
+			ResultSet rs = ps.executeQuery();
+			List<User> userList = toUserList(rs);
+			if (userList.isEmpty() == true) {
+				return null;
+			} else if (2 <= userList.size()) {
+				throw new IllegalStateException("2 <= userList.size()");
+			} else {
+				return userList.get(0);
+			}
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+
+
+
+	public List<User> getUser(Connection connection) {
+
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM users");
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ResultSet rs = ps.executeQuery();
+			List<User> ret = toUserList(rs);
+			return ret;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+
+
+
 	private List<User> toUserList(ResultSet rs) throws SQLException {
 		List<User> ret = new ArrayList<User>();
 		try {
@@ -98,6 +147,7 @@ public class UserDao {
 				String password = rs.getString("password");
 				int branchId = rs.getInt("branch_id");
 				int departmentId = rs.getInt("department_id");
+				int isStopped = rs.getInt("is_stopped");
 				Timestamp insertDate = rs.getTimestamp("insert_date");
 				Timestamp updateDate = rs.getTimestamp("update_date");
 
@@ -108,6 +158,7 @@ public class UserDao {
 				user.setPassword(password);
 				user.setBranchId(branchId);
 				user.setDepartmentId(departmentId);
+				user.setIsstopped(isStopped);
 				user.setInsertDate(insertDate);
 				user.setUpdateDate(updateDate);
 
@@ -133,20 +184,18 @@ public class UserDao {
 			sql.append(", department_id = ?");
 			sql.append(", is_stopped = ?");
 			sql.append(", update_date = CURRENT_TIMESTAMP");
-
 			sql.append(" WHERE");
 			sql.append(" id = ?");
-			sql.append(" AND");
-			sql.append(" update_date = ?");
 
 			ps = connection.prepareStatement(sql.toString());
 
 			ps.setString(1, user.getAccount());
 			ps.setString(2, user.getName());
-			ps.setString(4, user.getPassword());
-			ps.setInt(3, user.getBranchId());
+			ps.setString(3, user.getPassword());
+			ps.setInt(4, user.getBranchId());
 			ps.setInt(5, user.getDepartmentId());
-
+			ps.setInt(6, user.getIsStopped());
+			ps.setInt(7, user.getId());
 
 			int count = ps.executeUpdate();
 			if (count == 0) {
@@ -160,4 +209,50 @@ public class UserDao {
 
 	}
 
+	public void stopUser(Connection connection, int id, int isStopped) {
+
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE users SET");
+			sql.append(" is_stopped =?");
+			sql.append(" Where");
+			sql.append(" id = ?");
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setInt(1, isStopped);
+			ps.setInt(2, id);
+
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+
+	public void deleteUser(Connection connection, int id) {
+
+		PreparedStatement ps = null;
+
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE from users");
+			sql.append(" WHERE");
+			sql.append(" id = ?");
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ps.setInt(1, id);
+
+			System.out.println(ps.toString());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
 }

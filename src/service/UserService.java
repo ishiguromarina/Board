@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.util.List;
 
 import beans.User;
-import dao.ManageUserDao;
 import dao.UserDao;
 import utils.CipherUtil;
 
@@ -41,16 +40,15 @@ public class UserService {
 
 
 
-	private static final int LIMIT_NUM = 1000;
-
+//ユーザー管理画面
 	public List<User> getUser() {
 
 		Connection connection = null;
 		try {
 			connection = getConnection();
 
-			ManageUserDao manageuserDao = new ManageUserDao();
-			List<User> ret = manageuserDao.getUserAll(connection, LIMIT_NUM);
+			UserDao userDao = new UserDao();
+			List<User> ret = userDao.getUser(connection);
 
 			commit(connection);
 
@@ -67,7 +65,7 @@ public class UserService {
 	}
 
 
-
+//ユーザー編集画面
 	public void update(User user) {
 
 		Connection connection = null;
@@ -79,6 +77,73 @@ public class UserService {
 
 			UserDao userDao = new UserDao();
 			userDao.update(connection, user);
+
+			commit(connection);
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+//ユーザー編集画面のユーザー情報取得
+
+	public User getSettingUser(int userId) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserDao userDao = new UserDao();
+			User ret = userDao.getUser(connection, userId);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+	public void stopUser(int id, int isStopped) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserDao userDao = new UserDao();
+			userDao.stopUser(connection,id,isStopped);
+
+			commit(connection);
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+
+	public void deleteUser(int id) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserDao userDao = new UserDao();
+			userDao.deleteUser(connection,id);
 
 			commit(connection);
 		} catch (RuntimeException e) {

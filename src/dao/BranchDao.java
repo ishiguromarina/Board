@@ -14,13 +14,12 @@ import exception.SQLRuntimeException;
 
 public class BranchDao {
 
-	public List<Branch> getBranch(Connection connection, int num) {
+	public List<Branch> getBranch(Connection connection) {
 
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT * FROM branches ");
-			//sql.append("ORDER BY insert_date DESC limit " + num);
 
 			ps = connection.prepareStatement(sql.toString());
 
